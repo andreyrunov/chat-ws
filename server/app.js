@@ -1,8 +1,26 @@
 const express = require('express')
-const socket = require('socket.io')
 const app = express()
+
+// const cors = require('cors')
+
+// const corsOptions = {
+// 	origin: 'http://localhost:3000',
+// 	credentials: true, //access-control-allow-credentials:true
+// 	optionSuccessStatus: 200,
+// 	changeOrigin: true,
+// }
+// app.use(cors(corsOptions))
+
+
 const server = require('http').Server(app) // создаем http сервер
-const ws = socket(server)
+const io = require('socket.io')(server, {
+	cors: {
+		origin: 'http://localhost:3000', 
+		methods: ['GET', 'POST'],
+		allowedHeaders: ['my-custom-header'],
+		credentials: true,
+	},
+})
 
 require('dotenv').config()
 const port = process.env.PORT
@@ -14,7 +32,11 @@ app.get('/rooms', (req, res) => {
 	res.json(rooms)
 })
 
-app.listen(port, (err) => {
+io.on('connection', (socket) => {
+	console.log('user connected', socket.id)
+})
+
+server.listen(port, (err) => {
 	if (err) {
 		throw Error(err)
 	}
