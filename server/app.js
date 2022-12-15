@@ -4,12 +4,14 @@ const app = express()
 const server = require('http').Server(app) // создаем http сервер
 const io = require('socket.io')(server, {
 	cors: {
-		origin: 'http://localhost:3000', 
+		origin: 'http://localhost:3000',
 		methods: ['GET', 'POST'],
 		allowedHeaders: ['my-custom-header'],
 		credentials: true,
 	},
 })
+
+app.use(express.json())
 
 require('dotenv').config()
 const port = process.env.PORT
@@ -17,8 +19,21 @@ const port = process.env.PORT
 const rooms = new Map()
 
 app.get('/rooms', (req, res) => {
-	rooms.set('hello', '')
 	res.json(rooms)
+})
+
+app.post('/rooms', (req, res) => {
+	const { roomId, userName } = req.body
+	if (!rooms.has(roomId)) {
+		rooms.set(
+			roomId,
+			new Map([
+				['users', new Map()],
+				['messages', []],
+			])
+		)
+	}
+	res.send()
 })
 
 io.on('connection', (socket) => {
