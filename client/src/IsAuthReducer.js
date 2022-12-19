@@ -7,7 +7,6 @@ const isAuthReducer = () => (state, action) => {
 			}
 		default:
 			return state
-			
 	}
 }
 export default isAuthReducer

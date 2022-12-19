@@ -5,17 +5,19 @@ import axios from 'axios'
 export default function JoinBlock({ onLogin }) {
 	const [roomId, setRoomId] = useState('')
 	const [userName, setUserName] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
 
-	const onEnter = () => {
+	const onEnter = async () => {
 		if (!roomId || !userName) {
 			return alert('Неверные данные!')
 		}
-		axios
+		setIsLoading(true)
+		await axios
 			.post('/rooms', {
 				roomId,
 				userName,
 			})
-			.then(onLogin)
+			onLogin()
 	}
 
 	return (
@@ -32,8 +34,8 @@ export default function JoinBlock({ onLogin }) {
 				value={userName}
 				onChange={(e) => setUserName(e.target.value)}
 			/>
-			<button onClick={onEnter} className='btn btn-success'>
-				Войти
+			<button disabled={isLoading} onClick={onEnter} className='btn btn-success'>
+				{isLoading ? "ВХОД..." : "ВОЙТИ" }
 			</button>
 		</div>
 	)
