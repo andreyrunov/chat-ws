@@ -37,6 +37,10 @@ app.post('/rooms', (req, res) => {
 })
 
 io.on('connection', (socket) => {
+	socket.on('ROOM:JOIN', (data) => {
+		console.log(data, 'мы тут!!!!!!!!!!!!!')
+	})
+
 	console.log('user connected', socket.id)
 })
 

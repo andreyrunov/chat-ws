@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-
 export default function JoinBlock({ onLogin }) {
 	const [roomId, setRoomId] = useState('')
 	const [userName, setUserName] = useState('')
@@ -11,13 +10,13 @@ export default function JoinBlock({ onLogin }) {
 		if (!roomId || !userName) {
 			return alert('Неверные данные!')
 		}
+		const obj = {
+			roomId,
+			userName,
+		}
 		setIsLoading(true)
-		await axios
-			.post('/rooms', {
-				roomId,
-				userName,
-			})
-			onLogin()
+		await axios.post('/rooms', obj)
+		onLogin(obj)
 	}
 
 	return (
@@ -34,8 +33,12 @@ export default function JoinBlock({ onLogin }) {
 				value={userName}
 				onChange={(e) => setUserName(e.target.value)}
 			/>
-			<button disabled={isLoading} onClick={onEnter} className='btn btn-success'>
-				{isLoading ? "ВХОД..." : "ВОЙТИ" }
+			<button
+				disabled={isLoading}
+				onClick={onEnter}
+				className='btn btn-success'
+			>
+				{isLoading ? 'ВХОД...' : 'ВОЙТИ'}
 			</button>
 		</div>
 	)
