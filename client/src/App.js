@@ -19,7 +19,7 @@ function App() {
 		})
 		socket.emit('ROOM:JOIN', obj)
 	}
-	console.log(state, '<<<<<<<<<<<------------ тут')
+	console.log(state.joined, '<<<<<<<<<<<------------ тут')
 	return (
 		<div className='wrapper'>
 			{!state.joined && <JoinBlock onLogin={onLogin} />}
