@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import socket from './socket';
 
 import reducer from './reducer'
@@ -12,14 +12,21 @@ function App() {
 	})
 
 	const onLogin = (obj) => {
-		console.log(obj)
 		dispatch({
 			type: 'JOINED',
 			payload: obj,
 		})
 		socket.emit('ROOM:JOIN', obj)
 	}
-	console.log(state.joined, '<<<<<<<<<<<------------ тут')
+
+	useEffect(() => {
+		socket.on('ROOM:JOIN', (users) => {
+			console.log('новый пользователь', users)
+		})
+	}, [])
+	
+	window.socket = socket
+
 	return (
 		<div className='wrapper'>
 			{!state.joined && <JoinBlock onLogin={onLogin} />}
